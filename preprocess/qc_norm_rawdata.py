@@ -12,7 +12,7 @@ COMBINED_OUT = os.path.join(OUTDIR, "combined.h5ad")
 os.makedirs(OUTDIR, exist_ok=True)
 
 MAX_CELLS_PER_DONOR = None
-SCVI_KEY = "X_scVI"   # change if your embedding key is different
+SCVI_KEY = "X_scVI"   
 
 
 adata = sc.read_h5ad(INPUT)
@@ -95,6 +95,9 @@ for donor in donors:
     if not sparse.issparse(adata_raw.X):
         adata_raw.X = sparse.csr_matrix(adata_raw.X)
 
+    #Downcast to float32 to halve the matrix memory footprint
+    adata_raw.X = adata_raw.X.astype(np.float32)
+
     print(" Raw (sparse X):", adata_raw)
     print(" obsm keys:", list(adata_raw.obsm.keys()))
 
@@ -131,7 +134,9 @@ for donor in donors:
     out_path = os.path.join(
         OUTDIR, f"qc_norm_mtg.sparse_trimmed.donor_{safe_donor}.h5ad"
     )
-    adata_raw.write_h5ad(out_path)
+    
+    # Added gzip compression when writing individual donor files
+    adata_raw.write_h5ad(out_path, compression="gzip")
     written_files.append(out_path)
     print(f" Saved {out_path}")
 
@@ -140,7 +145,7 @@ for donor in donors:
 print("All donors processed.")
 
 #combine all donors
-print("\nLoading donor files for merge...")
+print("\nLoading donor files for merge.")
 adatas = [sc.read_h5ad(f) for f in sorted(written_files)]
 
 combined = ad.concat(
@@ -168,5 +173,6 @@ for col in stale_var_cols:
 print("Combined object:", combined)
 print("Combined obsm keys:", list(combined.obsm.keys()))
 
-combined.write_h5ad(COMBINED_OUT)
+#Added gzip compression to the final combined file
+combined.write_h5ad(COMBINED_OUT, compression="gzip")
 print(f"Saved combined object to {COMBINED_OUT}")

@@ -9,14 +9,14 @@
 
 module load python/3.11
 
-
+!pip install 
 source ../../neuroenv/bin/activate
 
 #cd /users/aiyer51/data/aiyer51/scNeuro/preprocess
 
 
-python -u qc_norm_rawdata.py
+# python -u qc_norm_rawdata.py
 
-python -u merge_donors.py
+# python -u merge_donors.py
 
 python -u HVG.py
