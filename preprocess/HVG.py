@@ -6,12 +6,13 @@ import gc
 INPUT = "/users/aiyer51/scratch/qc_norm_mtg_by_donor/combined.h5ad"
 OUTDIR = "/users/aiyer51/scratch/qc_norm_mtg_by_donor/hvg_outputs"
 os.makedirs(OUTDIR, exist_ok=True)
-
+COUNTS_LAYER = "counts"
 HVG_LIST = [2000, 3000, 5000]
 BATCH_KEY = "Donor ID"
 
 adata = sc.read_h5ad(INPUT)
 print("Loaded:", adata)
+
 
 # Columns added by HVG; we'll strip these between runs
 HVG_COLS = [
@@ -25,7 +26,8 @@ for n_hvg in HVG_LIST:
     sc.pp.highly_variable_genes(
         adata,
         n_top_genes=n_hvg,
-        flavor="seurat",#replace with seuratv3
+        flavor="seurat_v3",
+        layer=COUNTS_LAYER,
         subset=False,
         inplace=True,
         batch_key=BATCH_KEY,
@@ -43,7 +45,7 @@ for n_hvg in HVG_LIST:
 
     cols = ["highly_variable"]
     extra_cols = [
-        "means", "dispersions", "dispersions_norm",
+        "means", "variances", "variances_norm",
         "highly_variable_rank", "highly_variable_nbatches", "highly_variable_intersection",
     ]
     cols += [c for c in extra_cols if c in adata.var.columns]
