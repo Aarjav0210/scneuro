@@ -13,8 +13,8 @@ source ../../neuroenv/bin/activate
 
 cd /users/aiyer51/data/aiyer51/scNeuro/scneuro/preprocess
 
-python -u qc_norm_rawdata.py
+python -u qc_norm.py
 
-python -u merge_donors.py
+python -u qc_merge_donors.py
 
-python -u HVG.py
+python -u HVG_selection.py
