@@ -4,7 +4,7 @@ import os
 import glob
 from scipy.sparse import csr_matrix  # Import required for the sparse safety check
 
-DONOR_DIR = "/users/aiyer51/scratch/qc_norm_mtg_by_donor"
+DONOR_DIR = os.getenv("SCRATCH_DATA_PATH", "./qc_norm_mtg_by_donor")
 OUT_COMBINED = os.path.join(DONOR_DIR, "combined.h5ad")
 
 donor_files = sorted(glob.glob(os.path.join(DONOR_DIR, "qc_norm_mtg.sparse_trimmed.donor_*.h5ad")))

@@ -3,8 +3,11 @@ import pandas as pd
 import os
 import gc
 
-INPUT = "/users/aiyer51/scratch/qc_norm_mtg_by_donor/combined.h5ad"
-OUTDIR = "/users/aiyer51/scratch/qc_norm_mtg_by_donor/hvg_outputs"
+
+DONOR_DIR = os.getenv("SCRATCH_DATA_PATH", "./qc_norm_mtg_by_donor")
+
+INPUT = os.path.join(DONOR_DIR, "combined.h5ad")
+OUTDIR = os.path.join(DONOR_DIR, "hvg_outputs")
 os.makedirs(OUTDIR, exist_ok=True)
 COUNTS_LAYER = "counts"
 HVG_LIST = [2000, 3000, 5000]

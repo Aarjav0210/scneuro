@@ -5,9 +5,10 @@ import numpy as np
 import os
 import glob
 
+SCRATCH_DIR = os.getenv("SCRATCH_DATA_PATH")
 
-INPUT = "/users/aiyer51/scratch/SEAAD_MTG_RNAseq_DREAM.2025-07-15.h5ad"
-OUTDIR = "/users/aiyer51/scratch/qc_norm_mtg_by_donor"
+INPUT = os.path.join(SCRATCH_DIR, "SEAAD_MTG_RNAseq_DREAM.2025-07-15.h5ad")
+OUTDIR = os.path.join(SCRATCH_dIR, "qc_norm_mtg_by_donor")
 COMBINED_OUT = os.path.join(OUTDIR, "combined.h5ad")
 os.makedirs(OUTDIR, exist_ok=True)
 
@@ -143,36 +144,3 @@ for donor in donors:
     del adata_raw
 
 print("All donors processed.")
-
-#combine all donors
-print("\nLoading donor files for merge.")
-adatas = [sc.read_h5ad(f) for f in sorted(written_files)]
-
-combined = ad.concat(
-    adatas,
-    axis=0,
-    join="inner",
-    merge="same",
-    uns_merge="same",
-    label=None,
-    index_unique=None,
-)
-
-# Remove stale per-donor var stats if present
-stale_var_cols = [
-    "n_cells_by_counts",
-    "mean_counts",
-    "pct_dropout_by_counts",
-    "total_counts",
-    "n_cells",
-]
-for col in stale_var_cols:
-    if col in combined.var.columns:
-        del combined.var[col]
-
-print("Combined object:", combined)
-print("Combined obsm keys:", list(combined.obsm.keys()))
-
-#Added gzip compression to the final combined file
-combined.write_h5ad(COMBINED_OUT, compression="gzip")
-print(f"Saved combined object to {COMBINED_OUT}")
