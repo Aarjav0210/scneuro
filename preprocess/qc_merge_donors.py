@@ -3,9 +3,13 @@ import scanpy as sc
 import os
 import glob
 from scipy.sparse import csr_matrix  # Import required for the sparse safety check
+from dotenv import load_dotenv
 
-DONOR_DIR = os.getenv("SCRATCH_DATA_PATH", "./qc_norm_mtg_by_donor")
-OUT_COMBINED = os.path.join(DONOR_DIR, "combined.h5ad")
+load_dotenv()
+
+
+DONOR_DIR = os.environ["SCRATCH_DATA_PATH"]
+OUT_COMBINED = os.environ["INPUT_COMBINED"]
 
 donor_files = sorted(glob.glob(os.path.join(DONOR_DIR, "qc_norm_mtg.sparse_trimmed.donor_*.h5ad")))
 print(f"Found {len(donor_files)} donor files to merge")

@@ -4,13 +4,14 @@ from scipy import sparse
 import numpy as np
 import os
 import glob
+from dotenv import load_dotenv
 
-SCRATCH_DIR = os.getenv("SCRATCH_DATA_PATH")
+load_dotenv()
 
-INPUT = os.path.join(SCRATCH_DIR, "SEAAD_MTG_RNAseq_DREAM.2025-07-15.h5ad")
-OUTDIR = os.path.join(SCRATCH_dIR, "qc_norm_mtg_by_donor")
-COMBINED_OUT = os.path.join(OUTDIR, "combined.h5ad")
-os.makedirs(OUTDIR, exist_ok=True)
+SCRATCH_DIR = os.environ["SCRATCH_DATA_PATH"]
+INPUT = os.environ["INPUT"]
+OUTDIR = os.environ["OUTDIR"]
+COMBINED_OUT = os.environ["COMBINED_OUT"]
 
 MAX_CELLS_PER_DONOR = None
 SCVI_KEY = "X_scVI"   

@@ -4,11 +4,20 @@ import os
 import gc
 
 
-DONOR_DIR = os.getenv("SCRATCH_DATA_PATH", "./qc_norm_mtg_by_donor")
+# DONOR_DIR = os.getenv("SCRATCH_DATA_PATH", "./qc_norm_mtg_by_donor")
 
-INPUT = os.path.join(DONOR_DIR, "combined.h5ad")
-OUTDIR = os.path.join(DONOR_DIR, "hvg_outputs")
-os.makedirs(OUTDIR, exist_ok=True)
+# INPUT = os.path.join(DONOR_DIR, "combined.h5ad")
+# OUTDIR = os.path.join(DONOR_DIR, "hvg_outputs")
+# os.makedirs(OUTDIR, exist_ok=True)
+# COUNTS_LAYER = "counts"
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DONOR_DIR = os.environ["SCRATCH_DATA_PATH"]
+INPUT = os.environ["INPUT_COMBINED"]
+OUTDIR = os.environ["OUTDIR_HVG"]
 COUNTS_LAYER = "counts"
 HVG_LIST = [2000, 3000, 5000]
 BATCH_KEY = "Donor ID"
