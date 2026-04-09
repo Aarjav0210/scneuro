@@ -68,6 +68,8 @@ logs/
 *.fastq
 *.fasta
 *.png
+*.xlsx
+
 
 
 # Large result/scratch dirs — keep structure but not contents
